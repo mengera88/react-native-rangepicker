@@ -46,8 +46,9 @@ const DateRangePicker = ({
   buttonStyle,
   buttonTextStyle,
   presetButtons,
+  isOpen,
+  onClose,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [weeks, setWeeks] = useState([]);
   const [selecting, setSelecting] = useState(false);
   const [dayHeaders, setDayHeaders] = useState([]);
@@ -83,12 +84,10 @@ const DateRangePicker = ({
     },
   };
 
-  const onOpen = () => {
-    setIsOpen(true);
-  };
-
   const onClose = () => {
-    setIsOpen(false);
+    if (onClose) {
+      onClose()
+    }
     setSelecting(false);
     if (!endDate) {
       onChange({
@@ -293,23 +292,8 @@ const DateRangePicker = ({
     select,
   ]);
 
-  const node = (
-    <View>
-      <TouchableWithoutFeedback onPress={onOpen}>
-        {children ? (
-          children
-        ) : (
-          <View>
-            <Text>Click me to show date picker</Text>
-          </View>
-        )}
-      </TouchableWithoutFeedback>
-    </View>
-  );
-
   return isOpen ? (
-    <>
-      <View style={mergedStyles.backdrop}>
+    <View style={mergedStyles.backdrop}>
         <TouchableWithoutFeedback style={styles.closeTrigger} onPress={onClose}>
           <View style={styles.closeContainer} />
         </TouchableWithoutFeedback>
@@ -378,11 +362,7 @@ const DateRangePicker = ({
           </View>
         </View>
       </View>
-      {node}
-    </>
-  ) : (
-    <>{node}</>
-  );
+  ) : null;
 };
 
 export default DateRangePicker;
